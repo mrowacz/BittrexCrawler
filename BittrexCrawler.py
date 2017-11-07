@@ -195,7 +195,7 @@ class BittrexCrawler(object):
 
 if __name__ == "__main__":
 
-    working_dir = "/opt/bittrex_crawler/"
+    working_dir = "/opt/BittrexCrawler/"
     os.chdir(working_dir)
 
     c = BittrexCrawler(debug_level=logging.INFO)
