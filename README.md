@@ -6,6 +6,17 @@
 ```
 
 ### dependencies
-1. pip install pyfunctional
+1. apt-get install python python-pip
+2. pip install requests pyfunctional pymongo
 
+### cron installation
+
+clone repo into opt dir
+```bash
+cd /opt && git clone https://github.com/mrowacz/BittrexCrawler.git
+```
+and add cron position
+```bash
+*/2 * * * * /usr/bin/python /opt/BittrexCrawler/BittrexCrawler.py
+```
 
