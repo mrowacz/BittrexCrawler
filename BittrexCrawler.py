@@ -166,11 +166,15 @@ class BittrexCrawler(object):
 
             last_price = None
             for obj in last_price_curr:
-                last_price = {
-                    "Bid": float(obj["Bid"]),
-                    "Ask": float(obj["Ask"]),
-                    "Last": float(obj["Last"])
-                }
+                try:
+                    last_price = {
+                        "Bid": float(obj["Bid"]),
+                        "Ask": float(obj["Ask"]),
+                        "Last": float(obj["Last"])
+                    }
+                except TypeError:
+                    logging.error("TypeError for: " + market)
+
 
             if last_price is None:
                 self.add_hist_record(market, curr_price)
@@ -196,7 +200,7 @@ class BittrexCrawler(object):
 if __name__ == "__main__":
 
     working_dir = "/opt/BittrexCrawler/"
-    os.chdir(working_dir)
+    # os.chdir(working_dir)
 
     c = BittrexCrawler(debug_level=logging.INFO)
     start = time.time()
