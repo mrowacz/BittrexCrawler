@@ -13,11 +13,12 @@ from pymongo import MongoClient
 class BittrexCrawler(object):
     def __init__(self, debug_level=logging.DEBUG):
         # logger
+        frmt_str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         root = logging.getLogger()
-        logging.basicConfig(filename='bittrex.log', filemode='a', level=debug_level)
+        logging.basicConfig(filename='bittrex.log', filemode='a', level=debug_level, format=frmt_str)
         ch = logging.StreamHandler(sys.stdout)
         ch.setLevel(logging.DEBUG)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter(frmt_str)
         ch.setFormatter(formatter)
         root.addHandler(ch)
         # mongo
