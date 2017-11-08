@@ -9,6 +9,9 @@
 1. apt-get install python python-pip
 2. pip install requests pyfunctional pymongo
 
+for cpp
+1. git submodule update --init --recursive
+
 ### cron installation
 
 clone repo into opt dir
