@@ -6,9 +6,14 @@
  */
 
 #include <chrono>
+#include <thread>
+#include <json.hpp>
 #include <cpr/cpr.h>
 
 #include "Stock.h"
+#include "Market.h"
+
+using json = nlohmann::json;
 
 Stock::Stock() : quit_monitor({0})
 {
@@ -16,6 +21,8 @@ Stock::Stock() : quit_monitor({0})
 
 Stock::~Stock()
 {
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
     quit_monitor = 1;
 	monitor.join();
     std::cout << "Quit monitor thread" << std::endl;
@@ -25,10 +32,18 @@ void Stock::start()
 {
     monitor = std::thread([this]() {
         while(1) {
-            auto r = cpr::Get(cpr::Url{"https://bittrex.com/api/v1.1/public/getcurrencies"},
+            auto r = cpr::Get(cpr::Url{"https://bittrex.com/api/v1.1/public/getmarkets"},
                               cpr::VerifySsl{false});
-            std::cout << r.status_code << " " << r.text << std::endl;
+            auto j = json::parse(r.text);
 
+            if (j.find("result") != j.end())
+            {
+                auto j_arr = *j.find("result");
+                for (auto it = j_arr.begin(); it != j_arr.end(); ++it) {
+                    Market *m = new Market(*it);
+                }
+
+            }
             wait(10000, [this]() -> bool {
                 if (this->quit_monitor == 1)
                     return true;
