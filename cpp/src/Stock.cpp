@@ -11,7 +11,6 @@
 #include <cpr/cpr.h>
 
 #include "Stock.h"
-#include "Market.h"
 
 using json = nlohmann::json;
 
@@ -21,8 +20,6 @@ Stock::Stock() : quit_monitor({0})
 
 Stock::~Stock()
 {
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
-
     quit_monitor = 1;
 	monitor.join();
     std::cout << "Quit monitor thread" << std::endl;
@@ -39,11 +36,24 @@ void Stock::start()
             if (j.find("result") != j.end())
             {
                 auto j_arr = *j.find("result");
-                for (auto it = j_arr.begin(); it != j_arr.end(); ++it) {
-                    Market *m = new Market(*it);
-                }
-
+                auto counter = 0;
+                std::for_each(j_arr.begin(), j_arr.end(), [this, &counter](json it) -> void {
+                    if (!it.at("BaseCurrency").get<std::string>().compare("BTC")) {
+                        auto marketStr = it["MarketName"];
+                        auto m_entry = markets.find(marketStr);
+                        if (m_entry == markets.end()) {
+                            // FIXME: Add proper logging point
+                            std::cout << "Added new Market " << marketStr << std::endl;
+                            markets.insert(std::make_pair<std::string, Market>(marketStr, Market(it)));
+                            counter ++;
+                        } else {
+                            std::cout << marketStr << " already exists" << std::endl;
+                        }
+                    }
+                });
+                std::cout << "Added new currencies " << counter << std::endl;
             }
+
             wait(10000, [this]() -> bool {
                 if (this->quit_monitor == 1)
                     return true;

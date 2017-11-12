@@ -7,4 +7,8 @@ int main(int argc, char** argv)
 {
 	Stock s;
 	s.start();
+
+    while(1) {
+
+    }
 }

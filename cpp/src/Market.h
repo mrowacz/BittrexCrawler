@@ -5,6 +5,7 @@
 #ifndef BITTREXCRAWLER_MARKET_H
 #define BITTREXCRAWLER_MARKET_H
 
+#include <thread>
 #include <string>
 #include <json.hpp>
 
@@ -12,6 +13,9 @@ class Market {
 
 public:
     Market(nlohmann::json j);
+    Market(Market &&o);
+    Market(const Market &that) = delete;
+    Market& operator=(const Market &rhs) = delete;
 
     // getters and setters
     const std::string &getCurrency() const;
@@ -30,16 +34,28 @@ public:
     void setBaseAddress(const std::string &baseAddress);
     const std::string &getNotice() const;
     void setNotice(const std::string &notice);
+    const std::string &getMarketName() const;
+    void setMarketName(const std::string &marketName);
+    unsigned int getMinTradeSize() const;
+    void setMinTradeSize(unsigned int minTradeSize);
+
+    void start();
 
 private:
+
+    void workerThread() noexcept;
+
     std::string currency;
     std::string currencyLong;
-    unsigned int minConfirmation;
+    std::string marketName;
+    unsigned int minTradeSize;
     float txFee;
     bool isActive;
     std::string coinType;
     std::string baseAddress;
     std::string notice;
+
+    std::thread worker;
 };
 
 
