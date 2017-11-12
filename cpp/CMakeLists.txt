@@ -9,7 +9,7 @@ SET(CMAKE_CXX_FLAGS_DEBUG "-O2 -g")
 SET(CMAKE_C_FLAGS_DEBUG "-O2")
 FILE(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
-add_executable(BittrexCrawler ${SOURCE_FILES} src/Market.cpp src/Market.h)
+add_executable(BittrexCrawler ${SOURCE_FILES})
 include_directories(
         ${CPR_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}/json/src
