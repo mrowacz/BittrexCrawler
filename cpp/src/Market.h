@@ -17,13 +17,14 @@ public:
     Market(nlohmann::json j);
     Market(Market &&o);
     Market(const Market &that) = delete;
+
+    virtual ~Market();
+
     Market& operator=(const Market &rhs) = delete;
 
-    void start();
-
 private:
-
-    void workerThread() noexcept;
+    void start();
+    void workerThread();
 
     std::thread worker;
 };
