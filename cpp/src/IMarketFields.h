@@ -7,6 +7,8 @@
 
 #include <string>
 
+//FIXME: refactor IMarketFields see setMarketName
+
 class IMarketFields {
 public:
     // getters and setters

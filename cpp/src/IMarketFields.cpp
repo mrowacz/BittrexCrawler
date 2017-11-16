@@ -3,7 +3,8 @@
 //
 
 #include "IMarketFields.h"
-
+#include <iostream>
+#include <algorithm>
 
 const std::string &IMarketFields::getCurrency() const {
     return currency;
@@ -66,7 +67,8 @@ const std::string &IMarketFields::getMarketName() const {
 }
 
 void IMarketFields::setMarketName(const std::string &marketName) {
-    IMarketFields::marketName = marketName;
+	this->marketName = std::string(marketName);
+	std::transform(marketName.begin(), marketName.end(), IMarketFields::marketName.begin(), ::tolower);
 }
 
 unsigned int IMarketFields::getMinTradeSize() const {

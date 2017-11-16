@@ -15,15 +15,13 @@ class Market : public IMarketFields {
 
 public:
     Market(nlohmann::json j);
-    Market(Market &&o);
+    Market(Market &&o) = delete;
     Market(const Market &that) = delete;
+    Market& operator=(const Market &rhs) = delete;
 
     virtual ~Market();
 
-    Market& operator=(const Market &rhs) = delete;
-
 private:
-    void start();
     void workerThread();
 
     std::thread worker;

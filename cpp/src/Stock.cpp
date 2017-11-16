@@ -9,6 +9,7 @@
 #include <thread>
 #include <json.hpp>
 #include <cpr/cpr.h>
+#include <exception>
 
 #include "Stock.h"
 
@@ -39,13 +40,22 @@ void Stock::start()
                 auto counter = 0;
                 std::for_each(j_arr.begin(), j_arr.end(), [this, &counter](json it) -> void {
                     if (!it.at("BaseCurrency").get<std::string>().compare("BTC")) {
-                        auto marketStr = it["MarketName"];
+                        std::string marketStr = it["MarketName"];
                         auto m_entry = markets.find(marketStr);
                         if (m_entry == markets.end()) {
                             // FIXME: Add proper logging point
                             std::cout << "Added new Market " << marketStr << std::endl;
-                            markets.insert(std::make_pair<std::string, Market>(marketStr, Market(it)));
-                            counter ++;
+                            std::cout << it << std::endl;
+
+                            try {
+                            	markets.emplace(std::piecewise_construct,
+                            			std::forward_as_tuple(marketStr),
+										std::forward_as_tuple(it));
+
+                            	counter ++;
+                            } catch (std::exception& e) {
+								std::cout << e.what() << std::endl;
+							}
                         } else {
                             std::cout << marketStr << " already exists" << std::endl;
                         }
