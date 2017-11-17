@@ -7,14 +7,17 @@
 
 #include <thread>
 #include <string>
+#include <memory>
 #include <json.hpp>
 
 #include "IMarketFields.h"
 
+class Subscriber;
 class Market : public IMarketFields {
 
 public:
-    Market(nlohmann::json j);
+    Market(nlohmann::json j, std::shared_ptr<Subscriber> &s);
+
     Market(Market &&o) = delete;
     Market(const Market &that) = delete;
     Market& operator=(const Market &rhs) = delete;
@@ -25,6 +28,7 @@ private:
     void workerThread();
 
     std::thread worker;
+    std::weak_ptr<Subscriber> subscriber;
 };
 
 

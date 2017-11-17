@@ -15,7 +15,7 @@
 
 using json = nlohmann::json;
 
-Stock::Stock() : quit_monitor({0})
+Stock::Stock() : quit_monitor({0}), sub()
 {
 }
 
@@ -50,7 +50,7 @@ void Stock::start()
                             try {
                             	markets.emplace(std::piecewise_construct,
                             			std::forward_as_tuple(marketStr),
-										std::forward_as_tuple(it));
+										std::forward_as_tuple(it, this->sub));
 
                             	counter ++;
                             } catch (std::exception& e) {

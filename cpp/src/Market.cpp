@@ -11,9 +11,11 @@
 #include <sstream>
 #include <cpr/cpr.h>
 
+#include "Subscriber.h"
+
 using json = nlohmann::json;
 
-Market::Market(nlohmann::json j)
+Market::Market(nlohmann::json j, std::shared_ptr<Subscriber> &s) : subscriber(s)
 {
     setCurrency(j["MarketCurrency"]);
     setCurrencyLong(j["MarketCurrencyLong"]);
@@ -39,7 +41,7 @@ void Market::workerThread()
     std::stringstream ss;
 
     ss << "https://bittrex.com/api/v1.1/public/getticker?market=";
-    ss << this->marketName;
+    ss << marketName;
     std::string url = ss.str();
 
     while(true) {
@@ -48,9 +50,20 @@ void Market::workerThread()
     				cpr::VerifySsl{false});
     		auto j = json::parse(r.text);
 
-    		std::cout << j << std::endl;
+    		auto result = j["result"];
+    		try {
+				float bid = result["Bid"];
+				float ask = result["Ask"];
+				float last = result["Last"];
 
-    	    std::this_thread::sleep_for(2s);
+				if (auto ss = subscriber.lock())
+					ss->enqueue(MongoEntry(marketName, bid, ask, last));
+    		} catch (std::exception& e) {
+
+    		}
+
+    	    std::this_thread::sleep_for(1s);
+
     	}
     }
 

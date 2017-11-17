@@ -5,8 +5,7 @@ project(BittrexCrawler)
 add_subdirectory(cpr)
 
 SET(CMAKE_CXX_STANDARD 14)
-SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
-SET(CMAKE_C_FLAGS_DEBUG "-O0 -g")
+SET(CMAKE_CXX_FLAGS "-O0 -g")
 FILE(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 add_executable(BittrexCrawler ${SOURCE_FILES})
