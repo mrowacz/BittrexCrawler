@@ -11,6 +11,7 @@
 #include <iostream>
 #include <mutex>
 #include <deque>
+#include <thread>
 
 #include "MongoEntry.h"
 
@@ -24,6 +25,7 @@ public:
 private:
 	std::deque<MongoEntry> dq;
 	std::mutex m;
+	std::thread worker;
 };
 
 #endif /* SUBSCRIBER_H_ */

@@ -75,6 +75,7 @@ void Stock::start()
     });
 }
 
+//TODO move this into separate library
 void Stock::wait(unsigned int ms_time, std::function<bool()> cmp) {
     using chr = std::chrono::high_resolution_clock;
 

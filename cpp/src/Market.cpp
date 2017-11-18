@@ -15,7 +15,9 @@
 
 using json = nlohmann::json;
 
-Market::Market(nlohmann::json j, std::shared_ptr<Subscriber> &s) : subscriber(s)
+Market::Market(nlohmann::json j, std::shared_ptr<Subscriber> &s) : subscriber(s),
+		success(0),
+		fail(0)
 {
     setCurrency(j["MarketCurrency"]);
     setCurrencyLong(j["MarketCurrencyLong"]);
@@ -58,12 +60,13 @@ void Market::workerThread()
 
 				if (auto ss = subscriber.lock())
 					ss->enqueue(MongoEntry(marketName, bid, ask, last));
-    		} catch (std::exception& e) {
 
+				success++;
+    		} catch (std::exception& e) {
+    			fail++;
     		}
 
     	    std::this_thread::sleep_for(1s);
-
     	}
     }
 

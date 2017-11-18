@@ -27,6 +27,9 @@ public:
 private:
     void workerThread();
 
+    long success;
+    long fail;
+
     std::thread worker;
     std::weak_ptr<Subscriber> subscriber;
 };

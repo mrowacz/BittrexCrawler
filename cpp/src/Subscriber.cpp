@@ -5,9 +5,27 @@
  *      Author: mrowacz
  */
 
+#include <chrono>
+
 #include "Subscriber.h"
 
-Subscriber::Subscriber() {}
+Subscriber::Subscriber()
+{
+    using namespace std::chrono_literals;
+
+	worker = std::thread([this]() {
+		while(true)
+		{
+			{
+				std::lock_guard<std::mutex> lock(m);
+				dq.pop_front();
+			}
+
+    	    std::this_thread::sleep_for(1s);
+
+		}
+	});
+}
 
 Subscriber::~Subscriber() {}
 

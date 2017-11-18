@@ -5,6 +5,8 @@
 
 int main(int argc, char** argv)
 {
+	//TODO replace sleeps by thread yielding
+
 	Stock s;
 	s.start();
 
