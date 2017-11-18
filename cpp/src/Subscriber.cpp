@@ -9,7 +9,7 @@
 
 #include "Subscriber.h"
 
-Subscriber::Subscriber()
+Subscriber::Subscriber() : m(), dq()
 {
     using namespace std::chrono_literals;
 
